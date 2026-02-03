@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.MainPage;
@@ -14,12 +15,14 @@ public class OrderTest {
 
     private WebDriver driver;
 
+    private final By orderButton;
     private final String name;
     private final String surname;
     private final String address;
     private final String phone;
 
-    public OrderTest(String name, String surname, String address, String phone) {
+    public OrderTest(By orderButton, String name, String surname, String address, String phone) {
+        this.orderButton = orderButton;
         this.name = name;
         this.surname = surname;
         this.address = address;
@@ -29,8 +32,11 @@ public class OrderTest {
     @Parameterized.Parameters
     public static Object[][] testData() {
         return new Object[][]{
-                {"Анастасия", "Головкина", "Санкт-Петербург", "89999999999"},
-                {"Петр", "Петров", "Санкт-Петербург", "88888888888"}
+                {By.xpath(".//button[@class='Button_Button__ra12g']"),
+                        "Анастасия", "Головкина", "Санкт-Петербург", "89999999999"},
+
+                {By.xpath(".//button[contains(text(),'Заказать')]"),
+                        "Петр", "Петров", "Санкт-Петербург", "88888888888"}
         };
     }
 
@@ -42,9 +48,9 @@ public class OrderTest {
     }
 
     @Test
-    public void orderScooterFromTopButton() {
+    public void orderScooterFromBothButtons() {
         MainPage mainPage = new MainPage(driver);
-        mainPage.clickTopOrderButton();
+        mainPage.clickOrderButton(orderButton);
 
         OrderPage orderPage = new OrderPage(driver);
         orderPage.fillFirstForm(name, surname, address, phone);

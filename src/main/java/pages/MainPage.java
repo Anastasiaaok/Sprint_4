@@ -1,37 +1,69 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class MainPage {
 
     private WebDriver driver;
+    private WebDriverWait wait;
 
     // Кнопки заказа
     private By topOrderButton = By.xpath(".//button[@class='Button_Button__ra12g']");
     private By bottomOrderButton = By.xpath(".//button[contains(text(),'Заказать')]");
 
-    // Вопросы FAQ
-    private By question1 = By.id("accordion__heading-0");
-    private By answer1 = By.id("accordion__panel-0");
+    // FAQ
+    private By question(int index) {
+        return By.id("accordion__heading-" + index);
+    }
+
+    private By answer(int index) {
+        return By.id("accordion__panel-" + index);
+    }
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(7));
     }
 
-    public void clickTopOrderButton() {
-        driver.findElement(topOrderButton).click();
+    // Клик по кнопке заказа
+    public void clickOrderButton(By button) {
+        wait.until(ExpectedConditions.elementToBeClickable(button));
+        driver.findElement(button).click();
     }
 
-    public void clickBottomOrderButton() {
-        driver.findElement(bottomOrderButton).click();
+    // Скролл вниз через PAGE_DOWN
+    private void scrollDown() {
+        driver.findElement(By.tagName("body"))
+                .sendKeys(Keys.PAGE_DOWN);
     }
 
-    public void clickQuestion() {
-        driver.findElement(question1).click();
+    // Клик по FAQ
+    public void clickQuestion(int index) {
+
+        // Прокручиваем несколько раз
+        for (int i = 0; i < 5; i++) {
+            scrollDown();
+        }
+
+        WebElement questionElement =
+                wait.until(ExpectedConditions.elementToBeClickable(question(index)));
+
+        questionElement.click();
     }
 
-    public boolean isAnswerDisplayed() {
-        return driver.findElement(answer1).isDisplayed();
+    // Получаем текст ответа
+    public String getAnswerText(int index) {
+
+        WebElement answerElement =
+                wait.until(ExpectedConditions.visibilityOfElementLocated(answer(index)));
+
+        return answerElement.getText();
     }
 }
