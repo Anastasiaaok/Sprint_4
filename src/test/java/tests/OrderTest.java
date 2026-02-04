@@ -1,28 +1,28 @@
 package tests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import pages.MainPage;
 import pages.OrderPage;
 
 @RunWith(Parameterized.class)
-public class OrderTest {
+public class OrderTest extends BaseTest {
 
-    private WebDriver driver;
-
-    private final By orderButton;
+    private final boolean isTopButton;
     private final String name;
     private final String surname;
     private final String address;
     private final String phone;
 
-    public OrderTest(By orderButton, String name, String surname, String address, String phone) {
-        this.orderButton = orderButton;
+    public OrderTest(boolean isTopButton,
+                     String name,
+                     String surname,
+                     String address,
+                     String phone) {
+
+        this.isTopButton = isTopButton;
         this.name = name;
         this.surname = surname;
         this.address = address;
@@ -30,37 +30,34 @@ public class OrderTest {
     }
 
     @Parameterized.Parameters
-    public static Object[][] testData() {
-        return new Object[][]{
-                {By.xpath(".//button[@class='Button_Button__ra12g']"),
-                        "Анастасия", "Головкина", "Санкт-Петербург", "89999999999"},
+    public static Object[][] getData() {
 
-                {By.xpath(".//button[contains(text(),'Заказать')]"),
-                        "Петр", "Петров", "Санкт-Петербург", "88888888888"}
+        return new Object[][]{
+                {true, "Анна", "Иванова", "Москва", "89990000000"},
+                {false, "Петр", "Петров", "Санкт-Петербург", "88880000000"}
         };
     }
 
-    @Before
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.get("https://qa-scooter.praktikum-services.ru/");
-    }
-
     @Test
-    public void orderScooterFromBothButtons() {
+    public void orderTest() {
+
         MainPage mainPage = new MainPage(driver);
-        mainPage.clickOrderButton(orderButton);
+
+        mainPage.clickOrderButton(isTopButton);
 
         OrderPage orderPage = new OrderPage(driver);
-        orderPage.fillFirstForm(name, surname, address, phone);
+
+        orderPage.fillFirstForm(
+                name,
+                surname,
+                address,
+                phone
+        );
+
         orderPage.confirmOrder();
 
-        Assert.assertTrue(orderPage.isOrderCreated());
-    }
-
-    @After
-    public void tearDown() {
-        driver.quit();
+        Assert.assertTrue(
+                orderPage.isOrderCreated()
+        );
     }
 }

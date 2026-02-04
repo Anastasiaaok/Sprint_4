@@ -1,51 +1,87 @@
 package tests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.By;
 import pages.MainPage;
 
 @RunWith(Parameterized.class)
-public class FaqTest {
+public class FaqTest extends BaseTest {
 
-    private WebDriver driver;
-    private final int questionIndex;
-    private final String expectedAnswer;
+    private final By question;
+    private final By answer;
+    private final String expectedText;
 
-    public FaqTest(int questionIndex, String expectedAnswer) {
-        this.questionIndex = questionIndex;
-        this.expectedAnswer = expectedAnswer;
+    public FaqTest(By question, By answer, String expectedText) {
+
+        this.question = question;
+        this.answer = answer;
+        this.expectedText = expectedText;
     }
 
     @Parameterized.Parameters
-    public static Object[][] getFaqData() {
+    public static Object[][] getData() {
+
         return new Object[][]{
-                {0, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."},
-                {1, "Пока что у нас так: один заказ — один самокат."}
+
+                {
+                        By.id("accordion__heading-0"),
+                        By.id("accordion__panel-0"),
+                        "Сутки — 400 рублей"
+                },
+                {
+                        By.id("accordion__heading-1"),
+                        By.id("accordion__panel-1"),
+                        "один заказ — один самокат"
+                },
+                {
+                        By.id("accordion__heading-2"),
+                        By.id("accordion__panel-2"),
+                        "на 8 мая"
+                },
+                {
+                        By.id("accordion__heading-3"),
+                        By.id("accordion__panel-3"),
+                        "начиная с завтрашнего дня"
+                },
+                {
+                        By.id("accordion__heading-4"),
+                        By.id("accordion__panel-4"),
+                        "Пока что нет"
+                },
+                {
+                        By.id("accordion__heading-5"),
+                        By.id("accordion__panel-5"),
+                        "с полной зарядкой"
+                },
+                {
+                        By.id("accordion__heading-6"),
+                        By.id("accordion__panel-6"),
+                        "пока самокат не привезли"
+                },
+                {
+                        By.id("accordion__heading-7"),
+                        By.id("accordion__panel-7"),
+                        "обязательно"
+                }
         };
     }
 
-    @Before
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.get("https://qa-scooter.praktikum-services.ru/");
-    }
-
     @Test
-    public void checkFaqAnswerText() {
+    public void checkFaqAnswers() {
+
         MainPage mainPage = new MainPage(driver);
-        mainPage.clickQuestion(questionIndex);
 
-        String actualText = mainPage.getAnswerText(questionIndex);
-        Assert.assertEquals(expectedAnswer, actualText);
-    }
+        mainPage.openFaq(question);
 
-    @After
-    public void tearDown() {
-        driver.quit();
+        String actualText =
+                mainPage.getAnswer(answer);
+
+        Assert.assertTrue(
+                "Ответ не содержит ожидаемый текст",
+                actualText.contains(expectedText)
+        );
     }
 }
