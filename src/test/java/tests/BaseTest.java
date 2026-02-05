@@ -18,6 +18,9 @@ public class BaseTest {
 
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
+
+        driver.manage().window().maximize(); // fullscreen ✅
+
         driver.get(BASE_URL);
     }
 

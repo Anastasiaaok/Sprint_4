@@ -33,13 +33,14 @@ public class OrderTest extends BaseTest {
     public static Object[][] getData() {
 
         return new Object[][]{
-                {true, "Анна", "Иванова", "Москва", "89990000000"},
-                {false, "Петр", "Петров", "Санкт-Петербург", "88880000000"}
+
+                {true, "Анастасия", "Головкина", "Санкт-Петербург", "89990000000"},
+                {false, "Петр", "Петров", "СПБ", "88880000000"}
         };
     }
 
     @Test
-    public void orderTest() {
+    public void orderScooterTest() {
 
         MainPage mainPage = new MainPage(driver);
 
