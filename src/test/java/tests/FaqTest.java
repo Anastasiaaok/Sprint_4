@@ -9,12 +9,12 @@ import pages.MainPage;
 @RunWith(Parameterized.class)
 public class FaqTest extends BaseTest {
 
-    private final int index;
+    private final int questionNumber;
     private final String expectedText;
 
-    public FaqTest(int index, String expectedText) {
+    public FaqTest(int questionNumber, String expectedText) {
 
-        this.index = index;
+        this.questionNumber = questionNumber;
         this.expectedText = expectedText;
     }
 
@@ -39,12 +39,53 @@ public class FaqTest extends BaseTest {
 
         MainPage mainPage = new MainPage(driver);
 
-        mainPage.openQuestion(index);
+        String actualText = "";
 
-        String actualText =
-                mainPage.getAnswerText(index);
+        switch (questionNumber) {
+
+            case 0:
+                mainPage.openImportantQuestion();
+                actualText = mainPage.getImportantAnswer();
+                break;
+
+            case 1:
+                mainPage.openPriceQuestion();
+                actualText = mainPage.getPriceAnswer();
+                break;
+
+            case 2:
+                mainPage.openRentTimeQuestion();
+                actualText = mainPage.getRentTimeAnswer();
+                break;
+
+            case 3:
+                mainPage.openTodayOrderQuestion();
+                actualText = mainPage.getTodayOrderAnswer();
+                break;
+
+            case 4:
+                mainPage.openExtendOrderQuestion();
+                actualText = mainPage.getExtendOrderAnswer();
+                break;
+
+            case 5:
+                mainPage.openChargerQuestion();
+                actualText = mainPage.getChargerAnswer();
+                break;
+
+            case 6:
+                mainPage.openCancelOrderQuestion();
+                actualText = mainPage.getCancelOrderAnswer();
+                break;
+
+            case 7:
+                mainPage.openRegionQuestion();
+                actualText = mainPage.getRegionAnswer();
+                break;
+        }
 
         Assert.assertTrue(
+                "Ответ не содержит ожидаемый текст",
                 actualText.contains(expectedText)
         );
     }

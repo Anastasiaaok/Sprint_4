@@ -7,6 +7,7 @@ import org.junit.runners.Parameterized;
 import pages.MainPage;
 import pages.OrderPage;
 
+
 @RunWith(Parameterized.class)
 public class OrderTest extends BaseTest {
 
@@ -35,7 +36,7 @@ public class OrderTest extends BaseTest {
         return new Object[][]{
 
                 {true, "Анастасия", "Головкина", "Санкт-Петербург", "89990000000"},
-                {false, "Петр", "Петров", "СПБ", "88880000000"}
+                {false, "Петр", "Петров", "Москва", "88880000000"}
         };
     }
 
