@@ -9,84 +9,71 @@ import pages.MainPage;
 @RunWith(Parameterized.class)
 public class FaqTest extends BaseTest {
 
-    private final int questionNumber;
+    private final int questionIndex;
     private final String expectedText;
 
-    public FaqTest(int questionNumber, String expectedText) {
 
-        this.questionNumber = questionNumber;
+    public FaqTest(int questionIndex, String expectedText) {
+        this.questionIndex = questionIndex;
         this.expectedText = expectedText;
     }
 
-    @Parameterized.Parameters
+
+    @Parameterized.Parameters(name = "FAQ {0}: проверка ответа")
     public static Object[][] getData() {
 
         return new Object[][]{
 
-                {0, "400 рублей"},
-                {1, "один заказ — один самокат"},
-                {2, "8 мая"},
-                {3, "завтрашнего дня"},
-                {4, "нет"},
-                {5, "зарядкой"},
-                {6, "не привезли"},
-                {7, "обязательно"}
+                {
+                        0,
+                        "Сутки — 400 рублей. Оплата курьеру — наличными или картой."
+                },
+                {
+                        1,
+                        "Пока что у нас так: один заказ — один самокат."
+                },
+                {
+                        2,
+                        "Допустим, вы оформляете заказ на 8 мая."
+                },
+                {
+                        3,
+                        "Только начиная с завтрашнего дня."
+                },
+                {
+                        4,
+                        "Пока что нет! Но если что-то срочное — всегда можно позвонить в поддержку."
+                },
+                {
+                        5,
+                        "Самокат приезжает к вам с полной зарядкой."
+                },
+                {
+                        6,
+                        "Нужно сразу позвонить в поддержку."
+                },
+                {
+                        7,
+                        "Да, обязательно. Всем самокатов!"
+                }
         };
     }
 
+
     @Test
-    public void checkFaqAnswers() {
+    public void faqAnswerTest() {
 
         MainPage mainPage = new MainPage(driver);
 
-        String actualText = "";
+        mainPage.openQuestion(questionIndex);
 
-        switch (questionNumber) {
+        String actualText =
+                mainPage.getAnswerText(questionIndex);
 
-            case 0:
-                mainPage.openImportantQuestion();
-                actualText = mainPage.getImportantAnswer();
-                break;
-
-            case 1:
-                mainPage.openPriceQuestion();
-                actualText = mainPage.getPriceAnswer();
-                break;
-
-            case 2:
-                mainPage.openRentTimeQuestion();
-                actualText = mainPage.getRentTimeAnswer();
-                break;
-
-            case 3:
-                mainPage.openTodayOrderQuestion();
-                actualText = mainPage.getTodayOrderAnswer();
-                break;
-
-            case 4:
-                mainPage.openExtendOrderQuestion();
-                actualText = mainPage.getExtendOrderAnswer();
-                break;
-
-            case 5:
-                mainPage.openChargerQuestion();
-                actualText = mainPage.getChargerAnswer();
-                break;
-
-            case 6:
-                mainPage.openCancelOrderQuestion();
-                actualText = mainPage.getCancelOrderAnswer();
-                break;
-
-            case 7:
-                mainPage.openRegionQuestion();
-                actualText = mainPage.getRegionAnswer();
-                break;
-        }
-
-        Assert.assertTrue(
-                "Ответ не содержит ожидаемый текст",
-                actualText.contains(expectedText)
+        Assert.assertEquals(
+                "Текст ответа не совпадает",
+                expectedText,
+                actualText
         );
     }
 }
