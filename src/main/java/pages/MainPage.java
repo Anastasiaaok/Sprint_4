@@ -12,7 +12,6 @@ public class MainPage {
     private WebDriverWait wait;
 
 
-    // ===== КНОПКИ ЗАКАЗА =====
 
     private By topOrderButton =
             By.xpath(".//button[@class='Button_Button__ra12g']");
@@ -21,7 +20,6 @@ public class MainPage {
             By.xpath(".//button[contains(text(),'Заказать')]");
 
 
-    // ===== FAQ (универсально) =====
 
     private By question(int index) {
         return By.id("accordion__heading-" + index);
@@ -39,7 +37,6 @@ public class MainPage {
     }
 
 
-    // ===== ЗАКАЗ =====
 
     public void clickOrderButton(boolean isTop) {
 
@@ -55,7 +52,6 @@ public class MainPage {
     }
 
 
-    // ===== FAQ =====
 
     private void scrollTo(By locator) {
 

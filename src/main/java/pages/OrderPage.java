@@ -46,7 +46,6 @@ public class OrderPage {
             By.xpath(".//div[text()='сутки']");
 
 
-    // Кнопка в форме заказа (единственная нужная)
     private By orderButton =
             By.xpath(".//div[contains(@class,'Order_Buttons')]//button[text()='Заказать']");
 
@@ -108,7 +107,6 @@ public class OrderPage {
                 .click();
 
 
-        // Клик по кнопке "Заказать" через JS
         JavascriptExecutor js =
                 (JavascriptExecutor) driver;
 
